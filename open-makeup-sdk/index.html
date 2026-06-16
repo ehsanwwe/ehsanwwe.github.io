@@ -232,7 +232,7 @@
       </section>
 
       <section class="card">
-        <div class="label">Reshape <span class="hint">drag to sculpt · 0–1</span></div>
+        <div class="label">Reshape <span class="hint">drag to sculpt · −1.5 to 1.5</span></div>
         <div id="morphs"></div>
         <div class="row" style="align-items:center">
           <button class="btn" id="resetMorph">Reset shape</button>
@@ -420,7 +420,7 @@ function buildMorphs(){
     const row = document.createElement('div'); row.className='slider';
     row.innerHTML = `<div class="head"><div><span class="name">${name}</span> <span class="about">${about}</span></div><span class="val">0.00</span></div>`;
     const range = document.createElement('input');
-    range.type='range'; range.min='0'; range.max='1'; range.step='0.01'; range.value='0';
+    range.type='range'; range.min='-1.5'; range.max='1.5'; range.step='0.05'; range.value='0';
     const val = row.querySelector('.val');
     range.oninput = () => { val.textContent=(+range.value).toFixed(2); mk.setMorph(name, +range.value); };
     row.appendChild(range);
