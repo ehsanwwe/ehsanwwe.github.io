@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>OpenMakeup — AR Beauty Studio</title>
+<meta name="description" content="Try on AR virtual makeup and reshape your face in real time, right in the browser. An open-source SDK demo." />
+
+<!-- Resolve the SDK's bare `three` imports for the browser (no bundler on GitHub Pages) -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+    "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
+  }
+}
+</script>
+
+<!-- MediaPipe runtime as globals (window.FaceMesh / window.Camera) -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619/face_mesh.js" crossorigin="anonymous"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#17121a; --bg2:#1f1822;
+    --surface:rgba(255,255,255,.045);
+    --line:rgba(231,180,160,.16);
+    --rose:#e0567a; --rose-soft:#f08aa3;
+    --gold:#c9a27e; --bulb:#ffe7c2;
+    --text:#f4ece9; --muted:#b39ea3; --muted2:#7d6e74;
+    --radius:18px;
+    --shadow:0 24px 60px -24px rgba(0,0,0,.65);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:
+      radial-gradient(1200px 700px at 78% -8%, rgba(224,86,122,.16), transparent 60%),
+      radial-gradient(900px 600px at -5% 110%, rgba(201,162,126,.12), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:Inter,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    line-height:1.5;
+  }
+  a{color:inherit}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 22px 56px}
+
+  /* ── header ── */
+  header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:26px}
+  .eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  h1{font-family:Fraunces,serif;font-weight:500;font-size:clamp(34px,6vw,62px);line-height:.98;margin:.18em 0 .12em;letter-spacing:-.01em}
+  h1 em{font-style:italic;color:var(--rose-soft)}
+  .tagline{color:var(--muted);max-width:42ch;font-size:15px}
+  .star{
+    display:inline-flex;align-items:center;gap:9px;text-decoration:none;white-space:nowrap;
+    border:1px solid var(--line);background:var(--surface);backdrop-filter:blur(8px);
+    padding:11px 16px;border-radius:999px;font-weight:600;font-size:14px;color:var(--text);
+    transition:transform .18s ease,border-color .18s ease,background .18s ease;
+  }
+  .star:hover{transform:translateY(-2px);border-color:var(--rose);background:rgba(224,86,122,.10)}
+  .star .s{color:var(--gold)}
+
+  /* ── layout ── */
+  .studio{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:26px;align-items:start}
+  @media(max-width:900px){.studio{grid-template-columns:1fr}}
+
+  /* ── mirror / viewport ── */
+  .mirror{position:relative;border-radius:calc(var(--radius) + 8px);padding:20px 18px 16px;
+    background:linear-gradient(180deg,rgba(255,231,194,.08),rgba(255,255,255,.02));
+    border:1px solid var(--line);box-shadow:var(--shadow)}
+  .bulbs{position:absolute;inset:8px 22px auto 22px;height:8px;display:flex;justify-content:space-between;pointer-events:none}
+  .bulbs i{width:8px;height:8px;border-radius:50%;background:var(--bulb);
+    box-shadow:0 0 10px 3px rgba(255,231,194,.55);opacity:.9;animation:glow 3.6s ease-in-out infinite}
+  .bulbs i:nth-child(2n){animation-delay:.5s}.bulbs i:nth-child(3n){animation-delay:1.1s}
+  @keyframes glow{0%,100%{opacity:.55}50%{opacity:1}}
+  .stage{position:relative;margin-top:14px;aspect-ratio:4/3;border-radius:var(--radius);overflow:hidden;
+    background:#0e0a11;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05), inset 0 0 80px rgba(0,0,0,.6)}
+  .stage video{display:none}
+  .stage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+  .vignette{position:absolute;inset:0;pointer-events:none;border-radius:var(--radius);
+    box-shadow:inset 0 0 120px rgba(0,0,0,.55)}
+  .overlay{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;
+    background:rgba(14,10,17,.78);backdrop-filter:blur(3px);transition:opacity .4s ease}
+  .overlay.hide{opacity:0;pointer-events:none}
+  .overlay .ttl{font-family:Fraunces,serif;font-size:20px;margin-bottom:6px}
+  .overlay .sub{color:var(--muted);font-size:13.5px;max-width:34ch}
+  .spinner{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.18);
+    border-top-color:var(--rose);animation:spin 1s linear infinite;margin:0 auto 16px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .statusbar{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:12.5px;color:var(--muted)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--muted2)}
+  .dot.live{background:#5fd08a;box-shadow:0 0 8px #5fd08a}
+
+  /* ── panel ── */
+  .panel{display:flex;flex-direction:column;gap:22px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 18px 20px;backdrop-filter:blur(10px)}
+  .label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:12px}
+  .label .hint{float:right;letter-spacing:0;text-transform:none;color:var(--muted2);font-weight:400}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:8px}
+  .tab{border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;
+    padding:9px 14px;border-radius:999px;font:inherit;font-size:13.5px;font-weight:500;
+    transition:all .16s ease}
+  .tab:hover{color:var(--text);border-color:var(--gold)}
+  .tab[aria-selected="true"]{background:var(--rose);border-color:var(--rose);color:#fff}
+
+  .swatches{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .sw{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent;
+    box-shadow:0 2px 6px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.12);
+    transition:transform .14s ease,border-color .14s ease}
+  .sw:hover{transform:scale(1.12)}
+  .sw[aria-pressed="true"]{border-color:#fff;transform:scale(1.12)}
+  .sw.custom{display:grid;place-items:center;background:linear-gradient(135deg,#e0567a,#c9a27e,#7a3b9d);color:#fff}
+  .sw.custom input{opacity:0;position:absolute;width:30px;height:30px;cursor:pointer}
+  .sw.custom span{font-size:15px;line-height:1;pointer-events:none}
+
+  .pills{display:flex;flex-wrap:wrap;gap:8px}
+  .pill{border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;
+    padding:7px 13px;border-radius:10px;font:inherit;font-size:13px;text-transform:capitalize;transition:all .16s ease}
+  .pill:hover{color:var(--text)}
+  .pill[aria-pressed="true"]{background:rgba(224,86,122,.16);border-color:var(--rose);color:var(--text)}
+
+  .thumbs{display:flex;gap:9px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+  .thumb{flex:0 0 auto;width:46px;height:46px;border-radius:12px;cursor:pointer;border:2px solid transparent;
+    background:#0e0a11 center/cover no-repeat;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+    transition:transform .14s ease,border-color .14s ease}
+  .thumb:hover{transform:translateY(-2px)}
+  .thumb[aria-pressed="true"]{border-color:var(--rose)}
+  .thumb.none{display:grid;place-items:center;color:var(--muted2);font-size:11px;text-align:center;line-height:1.1}
+
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .btn{border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer;
+    padding:10px 15px;border-radius:11px;font:inherit;font-size:13.5px;font-weight:500;transition:all .16s ease}
+  .btn:hover{border-color:var(--gold)}
+  .btn.warn:hover{border-color:var(--rose);color:var(--rose-soft)}
+
+  /* sliders */
+  .slider{margin:14px 0}
+  .slider .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+  .slider .name{font-size:14px;font-weight:500}
+  .slider .about{font-size:12px;color:var(--muted2)}
+  .slider .val{font-variant-numeric:tabular-nums;color:var(--gold);font-size:12.5px}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;
+    background:linear-gradient(90deg,var(--rose),var(--gold));outline:none;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;
+    background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.5);border:0}
+  input[type=range]::-moz-range-thumb{width:17px;height:17px;border-radius:50%;background:#fff;border:0;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+  .toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+  .toggle input{accent-color:var(--rose);width:16px;height:16px}
+
+  /* footer */
+  footer{margin-top:40px;border-top:1px solid var(--line);padding-top:24px;
+    display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  .install{display:inline-flex;align-items:center;gap:10px;background:#120d15;border:1px solid var(--line);
+    border-radius:11px;padding:10px 12px;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--text)}
+  .install .copy{background:none;border:0;color:var(--gold);cursor:pointer;font:inherit;font-size:12px}
+  .by{font-size:13.5px;color:var(--muted)}
+  .by a{color:var(--text);text-decoration:none;border-bottom:1px solid var(--gold)}
+  .by a:hover{color:var(--rose-soft)}
+
+  :focus-visible{outline:2px solid var(--rose);outline-offset:2px;border-radius:6px}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <div class="eyebrow">AR Beauty Studio · Open Source</div>
+      <h1>Open<em>Makeup</em></h1>
+      <p class="tagline">Try on virtual makeup and reshape your face in real time — running entirely in your browser, no app, no upload.</p>
+    </div>
+    <a class="star" href="https://github.com/ehsanwwe/OpenMakeupSDK" target="_blank" rel="noopener">
+      <span class="s">★</span> Star on GitHub
+    </a>
+  </header>
+
+  <div class="studio">
+
+    <!-- mirror -->
+    <section class="mirror">
+      <div class="bulbs" id="bulbs" aria-hidden="true"></div>
+      <div class="stage">
+        <video id="video" playsinline></video>
+        <canvas id="render"></canvas>
+        <div class="vignette" aria-hidden="true"></div>
+        <div class="overlay" id="overlay">
+          <div>
+            <div class="spinner" id="spinner"></div>
+            <div class="ttl" id="ovTtl">Warming up the mirror</div>
+            <div class="sub" id="ovSub">Loading the face model and shaders…</div>
+          </div>
+        </div>
+      </div>
+      <div class="statusbar"><span class="dot" id="dot"></span><span id="status">Starting…</span></div>
+    </section>
+
+    <!-- controls -->
+    <div class="panel">
+
+      <section class="card">
+        <div class="label">Look <span class="hint" id="catHint"></span></div>
+        <div class="tabs" id="tabs" role="tablist"></div>
+      </section>
+
+      <section class="card">
+        <div class="label">Color</div>
+        <div class="swatches" id="swatches"></div>
+
+        <div id="finishWrap" style="margin-top:18px">
+          <div class="label" style="margin-bottom:9px">Finish</div>
+          <div class="pills" id="finish"></div>
+        </div>
+
+        <div style="margin-top:18px">
+          <div class="label" style="margin-bottom:9px">Pattern <span class="hint" id="patHint"></span></div>
+          <div class="thumbs" id="thumbs"></div>
+        </div>
+
+        <div class="row">
+          <button class="btn warn" id="clearCat">Clear this look</button>
+          <button class="btn warn" id="clearAll">Remove all makeup</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="label">Reshape <span class="hint">drag to sculpt · 0–1</span></div>
+        <div id="morphs"></div>
+        <div class="row" style="align-items:center">
+          <button class="btn" id="resetMorph">Reset shape</button>
+          <label class="toggle"><input type="checkbox" id="wire"> Show mesh</label>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="install">
+      <span>npm i open-makeup-sdk</span>
+      <button class="copy" id="copy">copy</button>
+    </div>
+    <div class="by">
+      Built by <a href="https://github.com/ehsanwwe" target="_blank" rel="noopener">Ehsan Moradi</a>
+      · <a href="https://www.linkedin.com/in/ehsan-hightech" target="_blank" rel="noopener">LinkedIn</a>
+      · ⭐ it if you like it
+    </div>
+  </footer>
+</div>
+
+<script type="module">
+import { OpenMakeup, MORPH_CONTROLS } from 'https://cdn.jsdelivr.net/gh/ehsanwwe/OpenMakeupSDK@main/src/index.js';
+
+const REPO   = 'https://cdn.jsdelivr.net/gh/ehsanwwe/OpenMakeupSDK@main';
+const ASSETS = REPO + '/assets';
+const MP     = 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619';
+
+const $ = (id) => document.getElementById(id);
+
+// vanity bulbs
+$('bulbs').innerHTML = Array.from({length:14}).map(()=>'<i></i>').join('');
+
+// category model (canonical names; eyeline shown as "Eyeliner")
+const CATS = [
+  { key:'lipstick',   label:'Lips',       finish:true,  colors:['#b4002e','#d6336c','#e0567a','#a83250','#7d2238','#c2674f'] },
+  { key:'eyeshadow',  label:'Eyeshadow',  finish:true,  colors:['#7a3b9d','#b06ab3','#caa05a','#8a5a44','#3b5a8a','#2f7d6e'] },
+  { key:'blush',      label:'Blush',      finish:true,  colors:['#e26d7a','#f0909a','#e8a07e','#d4707a','#c98b8b'] },
+  { key:'foundation', label:'Foundation', finish:true,  colors:['#f0d4bd','#e6c2a3','#d9b89c','#c79e7e','#a87b59','#8a5e40'] },
+  { key:'eyeline',    label:'Eyeliner',   finish:false, colors:['#000000','#1c1c1c','#3a2b22','#2a2540'] },
+  { key:'mascara',    label:'Mascara',    finish:false, colors:['#000000','#1c1c1c','#3a2b22'] },
+];
+const FINISHES = ['matte','shimmer','glossy','glitter'];
+
+// per-category live state
+const state = {};
+for (const c of CATS) state[c.key] = { color:c.colors[0], finish:c.finish?'matte':null, pattern:null };
+let active = 'lipstick';
+
+const mk = new OpenMakeup({
+  video:  $('video'),
+  renderCanvas: $('render'),
+  assetsBaseUrl: ASSETS,
+  mediapipeBaseUrl: MP,
+  aiColor: async () => '#c21f4d',
+});
+
+function setStatus(msg, live=false){
+  $('status').textContent = msg;
+  $('dot').classList.toggle('live', live);
+}
+
+(async function boot(){
+  try{
+    await mk.init();
+    $('overlay').classList.add('hide');
+    setStatus('Tracking your face — pick a look', true);
+    buildTabs();
+    selectCategory('lipstick');
+    buildMorphs();
+  }catch(err){
+    $('spinner').style.display='none';
+    $('ovTtl').textContent = 'Camera needed';
+    $('ovSub').textContent = (String(err).includes('Permission')||String(err).toLowerCase().includes('denied'))
+      ? 'Allow camera access and reload to try the mirror.'
+      : 'Could not start: ' + (err?.message || err);
+    setStatus('Not running');
+    console.error(err);
+  }
+})();
+
+/* ── makeup application ── */
+async function applyActive(){
+  const c = state[active];
+  const opts = { color:c.color };
+  if (c.finish) opts.finish = c.finish;
+  if (c.pattern != null) opts.pattern = c.pattern;
+  try{ await mk.apply(active, opts); }catch(e){ console.warn(e); }
+}
+
+/* ── tabs ── */
+function buildTabs(){
+  const t = $('tabs'); t.innerHTML='';
+  for (const c of CATS){
+    const b = document.createElement('button');
+    b.className='tab'; b.textContent=c.label; b.setAttribute('role','tab');
+    b.setAttribute('aria-selected', String(c.key===active));
+    b.onclick = () => selectCategory(c.key);
+    t.appendChild(b);
+  }
+}
+function selectCategory(key){
+  active = key;
+  [...$('tabs').children].forEach((b,i)=>b.setAttribute('aria-selected', String(CATS[i].key===key)));
+  const cat = CATS.find(c=>c.key===key);
+  $('catHint').textContent = cat.label;
+  buildSwatches(cat);
+  buildFinish(cat);
+  buildThumbs(cat);
+}
+
+/* ── color ── */
+function buildSwatches(cat){
+  const wrap = $('swatches'); wrap.innerHTML='';
+  for (const col of cat.colors){
+    const s = document.createElement('button');
+    s.className='sw'; s.style.background=col; s.title=col;
+    s.setAttribute('aria-pressed', String(col===state[cat.key].color));
+    s.onclick = () => { state[cat.key].color=col; markPressed(wrap, s); applyActive(); };
+    wrap.appendChild(s);
+  }
+  // custom color
+  const custom = document.createElement('label');
+  custom.className='sw custom'; custom.title='Custom color';
+  custom.innerHTML = '<span>+</span><input type="color" value="'+state[cat.key].color+'">';
+  custom.querySelector('input').oninput = (e)=>{ state[cat.key].color=e.target.value; markPressed(wrap, null); applyActive(); };
+  wrap.appendChild(custom);
+}
+function markPressed(wrap, el){ [...wrap.children].forEach(c=>c.setAttribute('aria-pressed','false')); if(el) el.setAttribute('aria-pressed','true'); }
+
+/* ── finish ── */
+function buildFinish(cat){
+  $('finishWrap').style.display = cat.finish ? '' : 'none';
+  if(!cat.finish) return;
+  const wrap = $('finish'); wrap.innerHTML='';
+  for (const f of FINISHES){
+    const p = document.createElement('button');
+    p.className='pill'; p.textContent=f;
+    p.setAttribute('aria-pressed', String(f===state[cat.key].finish));
+    p.onclick = () => { state[cat.key].finish=f; [...wrap.children].forEach(x=>x.setAttribute('aria-pressed','false')); p.setAttribute('aria-pressed','true'); applyActive(); };
+    wrap.appendChild(p);
+  }
+}
+
+/* ── patterns (pulled live from the repo manifest) ── */
+function buildThumbs(cat){
+  const wrap = $('thumbs'); wrap.innerHTML='';
+  const list = mk.getPatterns(cat.key);
+  $('patHint').textContent = list.length ? list.length+' designs' : '';
+
+  const none = document.createElement('button');
+  none.className='thumb none'; none.textContent='color only';
+  none.setAttribute('aria-pressed', String(state[cat.key].pattern==null));
+  none.onclick = () => { state[cat.key].pattern=null; pressThumb(wrap,none); mk.clear(cat.key); applyActive(); };
+  wrap.appendChild(none);
+
+  for (const p of list){
+    const t = document.createElement('button');
+    t.className='thumb';
+    t.style.backgroundImage = `url(${ASSETS}/patterns/${cat.key}/${p.id}.png)`;
+    t.title = 'Pattern '+p.number;
+    t.setAttribute('aria-pressed', String(state[cat.key].pattern===p.number));
+    t.onclick = () => { state[cat.key].pattern=p.number; pressThumb(wrap,t); applyActive(); };
+    wrap.appendChild(t);
+  }
+}
+function pressThumb(wrap, el){ [...wrap.children].forEach(c=>c.setAttribute('aria-pressed','false')); el.setAttribute('aria-pressed','true'); }
+
+/* ── clear ── */
+$('clearCat').onclick = () => { state[active].pattern=null; mk.clear(active); buildThumbs(CATS.find(c=>c.key===active)); };
+$('clearAll').onclick = () => { for(const k in state) state[k].pattern=null; mk.clearAll(); buildThumbs(CATS.find(c=>c.key===active)); };
+
+/* ── reshape sliders (built from the model's real targets) ── */
+function buildMorphs(){
+  const wrap = $('morphs'); wrap.innerHTML='';
+  const friendly = {};
+  for (const [name,cfg] of Object.entries(MORPH_CONTROLS||{})) friendly[cfg.target]={name, about:cfg.about};
+  const targets = mk.getMorphTargets();
+  for (const tg of targets){
+    const f = friendly[tg];
+    const name = f ? f.name : tg;
+    const about = f ? f.about : 'raw target';
+    const row = document.createElement('div'); row.className='slider';
+    row.innerHTML = `<div class="head"><div><span class="name">${name}</span> <span class="about">${about}</span></div><span class="val">0.00</span></div>`;
+    const range = document.createElement('input');
+    range.type='range'; range.min='0'; range.max='1'; range.step='0.01'; range.value='0';
+    const val = row.querySelector('.val');
+    range.oninput = () => { val.textContent=(+range.value).toFixed(2); mk.setMorph(name, +range.value); };
+    row.appendChild(range);
+    wrap.appendChild(row);
+    row._range = range; row._val = val;
+  }
+  $('resetMorph').onclick = () => {
+    mk.resetMorph();
+    [...wrap.children].forEach(r=>{ if(r._range){ r._range.value=0; r._val.textContent='0.00'; }});
+  };
+}
+
+$('wire').onchange = (e) => mk.setWireframe(e.target.checked);
+
+$('copy').onclick = () => {
+  navigator.clipboard?.writeText('npm i open-makeup-sdk');
+  $('copy').textContent='copied'; setTimeout(()=>$('copy').textContent='copy',1400);
+};
+</script>
+</body>
+</html>
