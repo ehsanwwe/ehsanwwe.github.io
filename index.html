@@ -3,191 +3,369 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Ehsan Moradi — Senior Full-Stack & AI Engineer, hands-on CTO, building scalable products, AI systems, and real-time engines." />
-  <meta name="theme-color" content="#0b1020" />
-  <meta property="og:title" content="Ehsan Moradi — Full-Stack & AI Engineer" />
-  <meta property="og:description" content="Hands-on CTO with 18+ years building AI systems, scalable products, AR, and real-time engines." />
+  <meta name="description" content="Ehsan Moradi — Senior AI & Full-Stack Engineer. RAG systems, LLM agents, computer vision, and real-time 3D/AR (WebGL, Three.js, Unity)." />
+  <meta name="theme-color" content="#070b16" />
+  <meta property="og:title" content="Ehsan Moradi — Senior AI & Full-Stack Engineer" />
+  <meta property="og:description" content="RAG systems, LLM agents, computer vision, and real-time 3D/AR. 10+ years shipping production software." />
   <meta property="og:type" content="website" />
-  <title>Ehsan Moradi | Full-Stack & AI Engineer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta property="og:url" content="https://ehsanwwe.github.io/" />
+  <meta name="google-site-verification" content="PrLc9TsEm7Eomb3_ObNwf32BfNooqz1w4j-gSk7ICLw" />
+  <title>Ehsan Moradi | Senior AI & Full-Stack Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ehsan Moradi",
+    "jobTitle": "Senior AI & Full-Stack Engineer",
+    "email": "mailto:ehsan.hightech@gmail.com",
+    "url": "https://ehsanwwe.github.io",
+    "sameAs": [
+      "https://github.com/ehsanwwe",
+      "https://www.linkedin.com/in/ehsan-hightech/"
+    ],
+    "knowsAbout": ["RAG systems", "LLM agents", "Computer Vision", "WebGL", "Three.js", "React", "Next.js", "Python", "Unity"]
+  }
+  </script>
 </head>
 <body>
-  <div class="bg-grid"></div>
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="cursor-glow" aria-hidden="true"></div>
 
-  <header class="topbar">
-    <a class="brand" href="#home">Ehsan Moradi</a>
-    <nav class="nav">
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#home" aria-label="Home">
+      <span class="brand-mark">EM</span>
+      <span class="brand-name">Ehsan Moradi</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
     </nav>
+    <a class="button small primary nav-cta" href="Ehsan_Moradi_Resume.pdf" target="_blank" rel="noreferrer">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Resume
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
   </header>
 
-  <main id="home">
-    <section class="hero">
-      <div class="eyebrow">Senior Full-Stack & AI Engineer · Hands-on CTO</div>
-      <h1>Building production software across AI, backend systems, AR, and real-time rendering.</h1>
-      <p class="lead">
-        I design and ship end-to-end products with a strong focus on performance, architecture, and practical AI.
-        My work spans LLM applications, RAG systems, scalable web platforms, AR experiences, and custom engines.
-      </p>
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="home">
+      <div class="hero-inner">
+        <div class="hero-badge reveal">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          Open to remote &amp; on-site roles · B2B via my Armenian company
+        </div>
 
-      <div class="hero-actions">
-        <a class="button primary" href="mailto:ehsan.hightech@gmail.com">Email Me</a>
-        <a class="button secondary" href="https://github.com/ehsanwwe" target="_blank" rel="noreferrer">GitHub</a>
-        <a class="button secondary" href="https://www.linkedin.com/in/ehsan-hightech/" target="_blank" rel="noreferrer">LinkedIn</a>
+        <h1 class="hero-title reveal">
+          I build <span class="grad">AI systems</span> and
+          <span class="grad-alt">real-time 3D</span><br class="br-desktop" />
+          that ship to production.
+        </h1>
+
+        <p class="hero-sub reveal">
+          Senior AI &amp; Full-Stack Engineer — 10+ years from architecture to deployed code.
+          <span class="mono-line">RAG · LLM agents · computer vision · WebGL / Three.js · React / Next.js · Python</span>
+        </p>
+
+        <div class="hero-actions reveal">
+          <a class="button primary" href="Ehsan_Moradi_Resume.pdf" target="_blank" rel="noreferrer">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            View Resume
+          </a>
+          <a class="button ghost" href="https://github.com/ehsanwwe" target="_blank" rel="noreferrer">
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+            GitHub
+          </a>
+          <a class="button ghost" href="https://www.linkedin.com/in/ehsan-hightech/" target="_blank" rel="noreferrer">
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+            LinkedIn
+          </a>
+        </div>
+
+        <dl class="hero-stats reveal">
+          <div class="stat"><dt data-count="10">0</dt><dd>years shipping software</dd></div>
+          <div class="stat"><dt data-count="6">0</dt><dd>open-source projects</dd></div>
+          <div class="stat"><dt data-count="149">0</dt><dd>GitHub stars on Unity kits</dd></div>
+          <div class="stat"><dt class="static">M.Sc.</dt><dd>Artificial Intelligence</dd></div>
+        </dl>
       </div>
 
-      <div class="hero-stats">
-        <div class="stat">
-          <strong>18+ years</strong>
-          <span>Building software</span>
-        </div>
-        <div class="stat">
-          <strong>AI + Full-Stack</strong>
-          <span>Primary focus</span>
-        </div>
-        <div class="stat">
-          <strong>AR / Engines</strong>
-          <span>Deep technical edge</span>
-        </div>
-      </div>
+      <a class="scroll-hint" href="#about" aria-label="Scroll to About">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </a>
     </section>
 
+    <!-- ============ ABOUT ============ -->
     <section class="section" id="about">
-      <div class="section-title">
-        <span>About</span>
+      <div class="section-head reveal">
+        <span class="section-num mono">01</span>
+        <h2>About</h2>
       </div>
-      <div class="card">
-        <p>
-          I’m Ehsan Moradi, a hands-on CTO and senior engineer with a long track record of building real products.
-          My current focus is on full-stack development, AI systems, scalable backend architecture, and production-ready delivery.
-        </p>
-        <p>
-          I’ve also spent years in real-time graphics, AR, rendering engines, and performance-critical software.
-          That background gives me a strong bias toward clean architecture, fast execution, and systems that actually hold up in production.
-        </p>
+      <div class="about-grid">
+        <div class="card glass reveal">
+          <p>
+            I'm a senior engineer focused on AI products. Most of my recent work is in
+            <strong>RAG systems and LLM agents</strong>: a recommendation engine that answers from a real
+            product catalog, a multilingual diet-coaching agent, and an in-browser AR makeup SDK published on npm.
+          </p>
+          <p>
+            I'm comfortable owning a system from its architecture down to the deployed code — Python and
+            FastAPI on the backend, Next.js / React / TypeScript on the front end. Before AI became my main
+            focus I spent years in <strong>real-time graphics and AR</strong>, which still powers the
+            computer-vision work I do today.
+          </p>
+        </div>
+        <div class="card glass terminal reveal" aria-label="Quick facts">
+          <div class="terminal-bar"><span></span><span></span><span></span><em class="mono">ehsan@dev:~$</em></div>
+          <pre class="mono"><code><span class="t-cmd">$</span> whoami
+Senior AI &amp; Full-Stack Engineer · Hands-on CTO
+<span class="t-cmd">$</span> cat focus.txt
+RAG · LLM agents · CV · WebGL · AR
+<span class="t-cmd">$</span> echo $LOCATION
+Relocating to Yerevan, Armenia 🇦🇲
+<span class="t-cmd">$</span> npm info open-makeup-sdk
+published ✓  MIT  ·  AR makeup SDK
+<span class="t-cmd">$</span> _</code></pre>
+        </div>
       </div>
     </section>
 
+    <!-- ============ EXPERIENCE ============ -->
     <section class="section" id="experience">
-      <div class="section-title">
-        <span>Experience</span>
+      <div class="section-head reveal">
+        <span class="section-num mono">02</span>
+        <h2>Experience</h2>
       </div>
 
       <div class="timeline">
-        <article class="timeline-item card">
+        <article class="timeline-item card glass reveal">
           <div class="timeline-meta">
-            <h3>CTO · Awakening Dreams</h3>
-            <span>2019 — Present</span>
+            <h3>Senior AI &amp; Full-Stack Engineer · Hands-on CTO</h3>
+            <span class="mono badge-line">Awakening Dreams · 2019 — Present</span>
           </div>
           <ul>
-            <li>Built Mediuty, an AR virtual makeup platform with a custom real-time rendering engine.</li>
-            <li>Designed an AI consultation chat system for guided user interaction.</li>
-            <li>Built a RAG-based recommendation engine for personalized product discovery.</li>
-            <li>Developed a Covalo-like platform for raw material discovery and matching.</li>
-            <li>Built a full e-commerce platform with Laravel, inventory management, Redis caching, and analytics.</li>
-            <li>Led engineering planning, architecture decisions, and day-to-day technical execution.</li>
+            <li>Built an AI consultation chat assistant that guides users through product discovery before recommending anything.</li>
+            <li>Designed a RAG recommendation engine grounded in a real product catalog, driven by chat context and user intent.</li>
+            <li>Developed a full cosmetics e-commerce platform in Laravel with inventory, Redis caching, and analytics.</li>
+            <li>Created a generative-AI system that produces standard hospital architecture plans from domain requirements.</li>
+            <li>Built an AR virtual-makeup platform with real-time face tracking, including a browser-based version.</li>
+            <li>Ran engineering direction while staying hands-on across backend, frontend, AI, and graphics.</li>
           </ul>
         </article>
 
-        <article class="timeline-item card">
+        <article class="timeline-item card glass reveal">
           <div class="timeline-meta">
-            <h3>Senior Software Engineer · 360KIA</h3>
-            <span>2013 — 2019</span>
+            <h3>Senior Software Engineer</h3>
+            <span class="mono badge-line">360KIA · 2013 — 2019</span>
           </div>
           <ul>
-            <li>Built an early spherical 360° video viewing engine in C#.</li>
-            <li>Created a markerless AR engine using sensor fusion from compass and accelerometer inputs.</li>
-            <li>Implemented real-time 3D placement workflows for AR experiences.</li>
+            <li>Built one of the first spherical 360° video playback engines using C# and game-engine techniques.</li>
+            <li>Developed an early markerless AR engine using sensor fusion from compass and accelerometer data.</li>
+            <li>Implemented real-time 3D placement so virtual objects stayed grounded without markers.</li>
           </ul>
         </article>
 
-        <article class="timeline-item card">
+        <article class="timeline-item card glass reveal">
           <div class="timeline-meta">
-            <h3>Software Engineer · Spiral Design</h3>
-            <span>2012 — 2013</span>
+            <h3>Software Engineer</h3>
+            <span class="mono badge-line">Spiral Design · 2012 — 2013</span>
           </div>
           <ul>
-            <li>Built an interactive book engine for Android.</li>
-            <li>Contributed to the award-winning interactive book "Jungle Pariya".</li>
+            <li>Built an interactive book engine for Android; contributed to the award-winning interactive book “Jungle Pariya”.</li>
           </ul>
         </article>
       </div>
     </section>
 
+    <!-- ============ PROJECTS ============ -->
     <section class="section" id="projects">
-      <div class="section-title">
-        <span>Selected Projects</span>
+      <div class="section-head reveal">
+        <span class="section-num mono">03</span>
+        <h2>Featured Projects</h2>
       </div>
 
-      <div class="grid">
-        <article class="card">
-          <h3>Mediuty</h3>
-          <p>AR-based virtual makeup platform with a custom rendering engine and production deployment.</p>
+      <div class="bento">
+        <article class="card glass project featured reveal" data-tilt>
+          <div class="project-top">
+            <h3>OpenMakeupSDK</h3>
+            <div class="project-links">
+              <a href="https://ehsanwwe.github.io/open-makeup-sdk/" target="_blank" rel="noreferrer" aria-label="OpenMakeupSDK live demo">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </a>
+              <a href="https://github.com/ehsanwwe/OpenMakeupSDK" target="_blank" rel="noreferrer" aria-label="OpenMakeupSDK on GitHub">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+              </a>
+            </div>
+          </div>
+          <p>Real-time in-browser AR makeup &amp; face-reshape SDK — no backend. MediaPipe FaceMesh 468-point tracking with custom WebGL/GLSL shaders. 6 makeup categories, 73 pattern textures, real-time 3D face reshaping via blend shapes. Published on npm (MIT).</p>
+          <div class="tags mono"><span>WebGL</span><span>GLSL</span><span>MediaPipe</span><span>TypeScript</span><span>npm</span></div>
+          <a class="project-cta" href="https://ehsanwwe.github.io/open-makeup-sdk/" target="_blank" rel="noreferrer">Try the live demo →</a>
         </article>
-        <article class="card">
-          <h3>AI Consultation System</h3>
-          <p>Conversational guidance system for product and user assistance.</p>
+
+        <article class="card glass project reveal" data-tilt>
+          <div class="project-top">
+            <h3>RAG Recommendation Engine</h3>
+          </div>
+          <p>Intent-aware product recommendation grounded in a live catalog. Conversational context in, cited real products out — no hallucinated SKUs.</p>
+          <div class="tags mono"><span>RAG</span><span>LLM</span><span>FastAPI</span><span>Redis</span></div>
         </article>
-        <article class="card">
-          <h3>RAG Recommendation Engine</h3>
-          <p>Intent-aware product recommendation based on user conversations.</p>
+
+        <article class="card glass project reveal" data-tilt>
+          <div class="project-top">
+            <h3>Diet-Coach-Agent</h3>
+            <div class="project-links">
+              <a href="https://github.com/ehsanwwe/Diet-Coach-Agent" target="_blank" rel="noreferrer" aria-label="Diet-Coach-Agent on GitHub">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+              </a>
+            </div>
+          </div>
+          <p>Multilingual AI nutrition assistant — FastAPI + Next.js PWA with OTP auth, voice chat, and personalized meal planning with health guardrails.</p>
+          <div class="tags mono"><span>LLM Agent</span><span>FastAPI</span><span>Next.js</span><span>PWA</span></div>
         </article>
-        <article class="card">
-          <h3>Hospital Planning AI</h3>
-          <p>Generative AI system for creating standard architectural plans for hospitals.</p>
+
+        <article class="card glass project reveal" data-tilt>
+          <div class="project-top">
+            <h3>Hospital Planning AI</h3>
+          </div>
+          <p>Generative-AI system producing standards-compliant hospital architecture plans directly from domain requirements.</p>
+          <div class="tags mono"><span>Generative AI</span><span>Python</span></div>
         </article>
+
+        <article class="card glass project reveal" data-tilt>
+          <div class="project-top">
+            <h3>BudgetMate</h3>
+            <div class="project-links">
+              <a href="https://github.com/ehsanwwe/BudgetMate" target="_blank" rel="noreferrer" aria-label="BudgetMate on GitHub">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+              </a>
+            </div>
+          </div>
+          <p>Persian-first, privacy-focused AI finance assistant. Local-first with full RTL support: budgeting, goals, admin panel, AI finance chat.</p>
+          <div class="tags mono"><span>AI</span><span>RTL</span><span>Local-first</span></div>
+        </article>
+
+        <article class="card glass project reveal" data-tilt>
+          <div class="project-top">
+            <h3>Unity SoftBody Physics</h3>
+            <div class="project-links">
+              <a href="https://github.com/ehsanwwe/Unity-SoftBody-Physics" target="_blank" rel="noreferrer" aria-label="Unity SoftBody Physics on GitHub">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+              </a>
+            </div>
+          </div>
+          <p>Soft-body physics package for Unity.
+            <span class="stars mono">
+              <svg class="icon star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              129 stars · 11 forks
+            </span>
+          </p>
+          <div class="tags mono"><span>Unity</span><span>C#</span><span>Physics</span></div>
+        </article>
+
+        <article class="card glass project reveal" data-tilt>
+          <div class="project-top">
+            <h3>WarpLess-Docs</h3>
+            <div class="project-links">
+              <a href="https://github.com/ehsanwwe/WarpLess-Docs" target="_blank" rel="noreferrer" aria-label="WarpLess-Docs on GitHub">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+              </a>
+            </div>
+          </div>
+          <p>Computer-vision tool that turns warped or skewed document photos into clean, scanner-like scans.</p>
+          <div class="tags mono"><span>Python</span><span>OpenCV</span><span>CV</span></div>
+        </article>
+
+        <article class="card glass project reveal" data-tilt>
+          <div class="project-top">
+            <h3>Helicopter Controller Kit</h3>
+            <div class="project-links">
+              <a href="https://github.com/ehsanwwe" target="_blank" rel="noreferrer" aria-label="Helicopter Controller Kit on GitHub">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+              </a>
+            </div>
+          </div>
+          <p>Aerodynamics-based flight controller package for Unity.
+            <span class="stars mono">
+              <svg class="icon star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              20 stars
+            </span>
+          </p>
+          <div class="tags mono"><span>Unity</span><span>C#</span><span>Simulation</span></div>
+        </article>
+      </div>
+
+      <div class="section-foot reveal">
+        <a class="button ghost" href="https://github.com/ehsanwwe?tab=repositories" target="_blank" rel="noreferrer">All repositories →</a>
       </div>
     </section>
 
+    <!-- ============ SKILLS ============ -->
     <section class="section" id="skills">
-      <div class="section-title">
-        <span>Skills</span>
+      <div class="section-head reveal">
+        <span class="section-num mono">04</span>
+        <h2>Skills</h2>
       </div>
 
-      <div class="card skill-cloud">
-        <span>C#</span>
-        <span>C++</span>
-        <span>Java</span>
-        <span>PHP</span>
-        <span>JavaScript</span>
-        <span>TypeScript</span>
-        <span>HLSL</span>
-        <span>Next.js</span>
-        <span>React</span>
-        <span>Node.js</span>
-        <span>Laravel</span>
-        <span>Redis</span>
-        <span>OpenCV</span>
-        <span>LLMs</span>
-        <span>RAG</span>
-        <span>Agents</span>
-        <span>Unity</span>
-        <span>WebGL</span>
-        <span>Three.js</span>
-        <span>AR</span>
-        <span>Rendering Engines</span>
-        <span>System Design</span>
-        <span>Performance Optimization</span>
+      <div class="skills-grid">
+        <div class="card glass skill-group reveal">
+          <h3><span class="dot ai" aria-hidden="true"></span>AI &amp; LLM</h3>
+          <div class="tags mono"><span>RAG systems</span><span>LLM agents</span><span>Conversational AI</span><span>Recommendation engines</span><span>Prompt engineering</span><span>AI guardrails</span><span>Multilingual AI</span></div>
+        </div>
+        <div class="card glass skill-group reveal">
+          <h3><span class="dot gfx" aria-hidden="true"></span>Vision &amp; Graphics</h3>
+          <div class="tags mono"><span>MediaPipe</span><span>OpenCV</span><span>FaceMesh</span><span>WebGL</span><span>Three.js</span><span>Unity</span><span>GLSL / HLSL</span><span>Real-time rendering</span></div>
+        </div>
+        <div class="card glass skill-group reveal">
+          <h3><span class="dot fe" aria-hidden="true"></span>Frontend</h3>
+          <div class="tags mono"><span>Next.js</span><span>React</span><span>TypeScript</span><span>Tailwind</span><span>Vite</span><span>PWA</span><span>RTL interfaces</span></div>
+        </div>
+        <div class="card glass skill-group reveal">
+          <h3><span class="dot be" aria-hidden="true"></span>Backend</h3>
+          <div class="tags mono"><span>FastAPI</span><span>Laravel</span><span>Node.js</span><span>REST APIs</span><span>Redis</span><span>SQLite</span><span>Auth</span><span>Analytics</span></div>
+        </div>
+        <div class="card glass skill-group wide reveal">
+          <h3><span class="dot lang" aria-hidden="true"></span>Languages &amp; Tools</h3>
+          <div class="tags mono"><span>TypeScript</span><span>JavaScript</span><span>Python</span><span>PHP</span><span>C#</span><span>C++</span><span>Java</span><span>Git</span><span>Docker</span><span>Linux</span></div>
+        </div>
       </div>
     </section>
 
+    <!-- ============ CONTACT ============ -->
     <section class="section" id="contact">
-      <div class="section-title">
-        <span>Contact</span>
-      </div>
-
-      <div class="card contact-card">
-        <p>I’m open to remote opportunities in senior full-stack, backend, AI, and systems roles.</p>
-        <div class="contact-links">
-          <a href="mailto:ehsan.hightech@gmail.com">ehsan.hightech@gmail.com</a>
+      <div class="contact-card card glass reveal">
+        <h2 class="contact-title">Let's build something <span class="grad">real</span>.</h2>
+        <p class="contact-sub">
+          Open to senior AI, full-stack, and 3D/AR engineering roles — remote or on-site.
+          B2B contracting available through my company registered in Armenia.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="mailto:ehsan.hightech@gmail.com">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            ehsan.hightech@gmail.com
+          </a>
+          <a class="button ghost" href="Ehsan_Moradi_Resume.pdf" target="_blank" rel="noreferrer">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Resume (PDF)
+          </a>
+        </div>
+        <div class="contact-links mono">
           <a href="https://github.com/ehsanwwe" target="_blank" rel="noreferrer">github.com/ehsanwwe</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://www.linkedin.com/in/ehsan-hightech/" target="_blank" rel="noreferrer">linkedin.com/in/ehsan-hightech</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://www.npmjs.com/package/open-makeup-sdk" target="_blank" rel="noreferrer">npm: open-makeup-sdk</a>
         </div>
       </div>
     </section>
@@ -195,9 +373,9 @@
 
   <footer class="footer">
     <span>© <span id="year"></span> Ehsan Moradi</span>
-    <span>Built for GitHub Pages</span>
+    <span class="mono">Hand-built · GLSL hero rendered live in WebGL</span>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
