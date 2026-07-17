@@ -31,6 +31,22 @@ Every frame is generated live on the GPU — no pre-rendered video or baked anim
 
 `Next.js` · `React` · `Three.js` · `WebGL` · `GLSL`
 
+## Let's Build Something Exceptional
+
+Experience the renderer directly in the **[Live Demo](https://ehsanwwe.github.io/diamond-shader/)** and see the diamond running in real time inside your browser.
+
+Interested in real-time graphics, shaders, interactive experiences, or ambitious web products? I'm open to collaborations and challenging projects.
+
+If you enjoy this experiment, consider giving the repository a **Star** — it helps the project reach more developers and creators.
+
+<div align="center">
+
+[![Open Live Demo](https://img.shields.io/badge/Open_Live_Demo-Run_the_Renderer-111827?style=for-the-badge&logo=googlechrome&logoColor=white)](https://ehsanwwe.github.io/diamond-shader/)
+[![Work With Me](https://img.shields.io/badge/Work_With_Me-Let's_Connect-111827?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ehsanwwe)
+[![Star This Project](https://img.shields.io/badge/Star_This_Project-Support_the_Work-111827?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ehsanwwe/ehsanwwe.github.io)
+
+</div>
+
 ---
 
 <div align="center">
