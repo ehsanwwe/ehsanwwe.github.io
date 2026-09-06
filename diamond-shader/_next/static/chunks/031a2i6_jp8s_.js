@@ -666,7 +666,7 @@ void main() {
 
 			gl_FragColor = ApplyFXAA( tDiffuse, resolution.xy, vUv );
 
-		}`};function oO(e){return`/${e.replace(/^\//,"")}`}e.i(47167);let oF=`
+		}`};function oO(e){return`/diamond-shader/${e.replace(/^\//,"")}`}e.i(47167);let oF=`
 uniform sampler2D uEnvironment;
 vec3 environment(vec3 d){
  d=normalize(d);
