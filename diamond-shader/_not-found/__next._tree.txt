@@ -1,2 +1,2 @@
-:HL["/diamond-shader/_next/static/chunks/0zntdv26zqo4z.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"sd-dbBsNktir7A8XfDFoK"}
+:HL["/_next/static/chunks/3k1a85io96w3c.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"kC3WesamfyyrVgKghmJVC"}
